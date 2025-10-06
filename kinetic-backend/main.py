@@ -1,5 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.database.base import engine, Base
+from app.models import User, Workout
+
+#Create all tables in the database
+Base.metadata.create_all(bind=engine)
 
 # Create the FastAPI app
 # This is like creating your "server"
