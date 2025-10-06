@@ -1,0 +1,76 @@
+Website - Kinetic 
+
+------------------------------------------------------------------------
+
+Web App Tech Stack
+Frontend
+
+React 18+ - UI framework
+Vite - Build tool
+React Router - Navigation
+Tailwind CSS - Styling
+Recharts - Charts
+Axios - API calls
+Zustand - State management
+
+Deploy: Vercel (free)
+
+Backend
+
+FastAPI (Python 3.10+) - API framework
+PostgreSQL - Database
+SQLAlchemy - ORM
+Alembic - Migrations
+Redis - Caching
+Celery - Background jobs
+OpenAI API - AI coaching
+Strava API - Workout sync
+
+Deploy: Railway ($5-20/month)
+
+------------------------------------------------------------------------
+
+Step-by-Step Development Plan
+Phase 1: Foundation
+
+Set up React project with Vite
+Set up FastAPI backend
+Set up PostgreSQL database
+Create database schema and models
+
+Phase 2: Strava Integration
+
+Register Strava app (get API credentials)
+Build OAuth login flow
+Build sync endpoint to fetch workouts
+Store workouts in database
+
+Phase 3: Backend Core
+
+Build analytics service (training load, zones, trends)
+Integrate OpenAI API
+Build chat endpoint (send message, get AI response)
+Set up Celery for background sync
+
+Phase 4: Frontend Pages
+
+Build authentication/login page
+Build Dashboard (stats, charts, recent workouts)
+Build Chat page (message interface)
+Build Workouts page (list, filters, detail view)
+Build Analytics page (trends, charts, insights)
+Build Settings page (profile, preferences)
+
+Phase 5: Polish
+
+Add notifications
+Mobile responsive design
+Error handling and loading states
+Testing
+
+Phase 6: Deploy
+
+Deploy backend to Railway
+Deploy frontend to Vercel
+Configure environment variables
+Test production
