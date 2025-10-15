@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database.base import engine, Base
 from app.models import User, Workout
+from app.routes import strava
 
 #Create all tables in the database
 Base.metadata.create_all(bind=engine)
@@ -20,6 +21,8 @@ app.add_middleware(
     allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"],  # Allow all headers
 )
+
+app.include_router(strava.router)
 
 # This is an "endpoint" or "route"
 # When someone visits http://localhost:8000/ they'll get this response
