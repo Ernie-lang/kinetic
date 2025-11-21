@@ -19,7 +19,7 @@ class User(Base):
     strava_access_token = Column(String)
     strava_refresh_token = Column(String)
     strava_token_expires_at = Column(DateTime, nullable=True)
-    strava_athlete_id = Column(String, nullable=True, index=True)
+    strava_athlete_id = Column(Integer, nullable=True, index=True)
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
