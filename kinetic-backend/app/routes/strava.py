@@ -2,7 +2,6 @@
 Strava OAuth and Sync Endpoints
 """
 
-from sqlite3 import paramstyle
 from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.orm import Session
 import httpx
@@ -26,6 +25,21 @@ STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token"
 STRAVA_API_BASE = "https://www.strava.com/api/v3"
 
 @router.get("/auth/url")
+async def get_auth_url():
+    """
+    Generate Strava OAuth authorization URL
+    """
+    auth_url = (
+        f"{STRAVA_AUTH_URL}?"
+        f"client_id={STRAVA_CLIENT_ID}&"
+        f"redirect_uri={STRAVA_REDIRECT_URI}&"
+        f"response_type=code&"
+        f"scope=read,activity:read_all"
+    )
+    
+    return {"auth_url": auth_url}
+
+@router.post("/auth/callback")
 async def handle_callback(
     code: str,
     db: Session = Depends(get_db),
@@ -46,22 +60,21 @@ async def handle_callback(
                     "grant_type": "authorization_code"
                 }
             )
-            response.raise_for_status()
-            data = response.json()
+            token_response.raise_for_status()
+            data = token_response.json()
 
-            athlete = data.get["athlete"]
+            athlete = data.get("athlete")
 
             # Check if user exists
-            user = db.query(User).filter(User.strava_athlete_id == athlete.get["id"]).first()
+            user = db.query(User).filter(User.strava_athlete_id == athlete.get("id")).first()
 
             if not user:
                 # Create new user
                 user = User(
-                    email=athlete.get("email", f"user{athlete.get['id']}@strava.local"),
+                    email=athlete.get("email", f"user{athlete.get('id')}@strava.local"),
                     first_name=athlete.get("firstname"),
                     last_name=athlete.get("lastname"),
                     profile_photo=athlete.get("profile"),
-                    strava_id=str(athlete.get["id"]),
                     strava_athlete_id=athlete["id"],
                     strava_access_token=data["access_token"],
                     strava_refresh_token=data["refresh_token"],
@@ -81,15 +94,18 @@ async def handle_callback(
             db.refresh(user)
 
             return {
-                "success": True,
-                "user_id": user.id,
-                "athlete": athlete,
+                "id": user.id,
+                "email": user.email,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "profile_photo": user.profile_photo,
+                "strava_athlete_id": user.strava_athlete_id,
             }
 
         except httpx.HTTPStatusError as e:
             raise HTTPException(status_code=400, detail=f"Strava API Error: {str(e)}")
 
-async def refresh_strava_token(user: User, dp: Session):
+async def refresh_strava_token(user: User, db: Session):
     """ Refresh expired Strava access token """
     async with httpx.AsyncClient() as client:
         response = await client.post(
@@ -104,8 +120,8 @@ async def refresh_strava_token(user: User, dp: Session):
         response.raise_for_status()
         data = response.json()
 
-        user.strava_access_token = data["access token"]
-        user.strava_refresh_token = data["refresh token"]
+        user.strava_access_token = data["access_token"]
+        user.strava_refresh_token = data["refresh_token"]
         user.strava_token_expires_at = datetime.fromtimestamp(data["expires_at"])
         db.commit()
 
@@ -131,7 +147,7 @@ async def sync_workouts(
         raise HTTPException(status_code=404, detail="User not found")
 
     if not user.strava_access_token:
-        raise HTTPException(status_code=404, detail="Strava not connected")
+        raise HTTPException(status_code=400, detail="Strava not connected")
 
     token = await get_valid_token(user, db)
 
@@ -192,7 +208,7 @@ async def sync_workouts(
 @router.get("/status/{user_id}")
 async def get_strava_status(user_id: int, db: Session = Depends(get_db)):
     """ Check if user has connected """
-    user = db.query(User).filer(User.id == user_id).first()
+    user = db.query(User).filter(User.id == user_id).first()
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
