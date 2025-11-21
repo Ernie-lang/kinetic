@@ -11,11 +11,11 @@ const api = axios.create({
 
 // Strava API endpoints
 export const stravaAPI = {
-    getAuthUrl: () => api.get('/strava/auth-url'),
-    handleCallback: (code) => api.post('/strava/callback', { code }),
+    getAuthUrl: () => api.get('/strava/auth/url'),
+    handleCallback: (code) => api.post(`/strava/auth/callback?code=${code}`),
     syncWorkouts: (userId) => api.post(`/strava/sync/${userId}`),
     getStatus: (userId) => api.get(`/strava/status/${userId}`),
-    disconnect: (userId) => api.post(`/strava/disconnect/${userId}`),
+    disconnect: (userId) => api.delete(`/strava/disconnect/${userId}`),
 };
 
 // Workouts API
