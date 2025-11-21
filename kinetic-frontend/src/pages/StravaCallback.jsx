@@ -94,3 +94,5 @@ const StravaCallback = () => {
         </div>
     );
 };
+
+export default StravaCallback;
