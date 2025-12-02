@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database.base import engine, Base
 from app.models import User, Workout
-from app.routes import strava, workouts
+from app.routes import strava, workouts, chat, analytics
 
 #Create all tables in the database
 Base.metadata.create_all(bind=engine)
@@ -25,6 +25,8 @@ app.add_middleware(
 
 app.include_router(strava.router)
 app.include_router(workouts.router, prefix="/api", tags=["workouts"])
+app.include_router(chat.router)
+app.include_router(analytics.router)
 
 # This is an "endpoint" or "route"
 # When someone visits http://localhost:8000/ they'll get this response
