@@ -23,4 +23,20 @@ export const workoutsAPI = {
     getUserWorkouts: (userId) => api.get(`/workouts/${userId}`),
 };
 
+// Chat API endpoints
+export const chatAPI = {
+    sendMessage: (userId, message) => api.post(`/chat/message`, { user_id: userId, message }),
+    getHistory: async (userId) => {
+        const response = await api.get(`/chat/history/${userId}`);
+        return { data: response.data.messages };
+    },
+    getUsage: (userId) => api.get(`/chat/usage/${userId}`),
+};
+
+// Analytics API endpoints
+export const analyticsAPI = {
+    getDashboardStats: (userId) => api.get(`/analytics/dashboard/${userId}`),
+    getWeeklySummary: (userId) => api.get(`/analytics/weekly/${userId}`),
+};
+
 export default api;
