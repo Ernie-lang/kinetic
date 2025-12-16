@@ -25,6 +25,7 @@ export default function Navigation() {
                     <Link to="/dashboard" className={linkClass('/dashboard')}>Dashboard</Link>
                     <Link to="/workouts" className={linkClass('/workouts')}>Workouts</Link>
                     <Link to="/chat" className={linkClass('/chat')}>Chat</Link>
+                    <Link to="/programs" className={linkClass('/programs')}>Programs</Link>
                 </div>
             </div>
         </nav>

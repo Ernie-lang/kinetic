@@ -39,4 +39,20 @@ export const analyticsAPI = {
     getWeeklySummary: (userId) => api.get(`/analytics/weekly/${userId}`),
 };
 
+// Programs API endpoints
+export const programsAPI = {
+    generate: (userId, programData) => api.post('/programs/generate', {
+        user_id: userId,
+        ...programData
+    }),
+    getAll: (userId) => api.get(`/programs/${userId}`),
+    getDetail: (programId) => api.get(`/programs/detail/${programId}`),
+    markComplete: (workoutId) => api.put(`/programs/workout/${workoutId}/complete`),
+    delete: (programId) => api.delete(`/programs/${programId}`),
+    regenerateWeek: (weekId, userId, adjustmentRequest) => api.put(`/programs/week/${weekId}/regenerate`, {
+        user_id: userId,
+        adjustment_request: adjustmentRequest
+    }),
+};
+
 export default api;

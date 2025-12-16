@@ -5,6 +5,8 @@ import Dashboard from './pages/Dashboard';
 import Workouts from './pages/Workouts';
 import Chat from './pages/Chat';
 import Navigation from './components/Navigation';
+import Programs from './pages/Programs';
+import ProgramDetail from './pages/ProgramDetail';
 
 function App() {
   return (
@@ -31,6 +33,18 @@ function App() {
           <>
             <Navigation />
             <Chat />
+          </>
+        } />
+        <Route path='/programs' element={
+          <>
+            <Navigation />
+            <Programs />
+          </>
+        } />
+        <Route path='/programs/:programId' element={
+          <>
+            <Navigation />
+            <ProgramDetail />
           </>
         } />
       </Routes>

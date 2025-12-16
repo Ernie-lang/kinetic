@@ -25,6 +25,7 @@ class User(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
+    training_programs = relationship("TrainingProgram", back_populates="user")
     workouts = relationship("Workout", back_populates="user", cascade="all, delete-orphan")
     chat_messages = relationship("ChatMessage", back_populates="user")
     daily_usage = relationship("DailyUsage", back_populates="user")
