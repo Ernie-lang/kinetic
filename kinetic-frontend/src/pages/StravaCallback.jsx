@@ -43,7 +43,6 @@ const StravaCallback = () => {
                 setStatus('syncing');
                 await stravaAPI.syncWorkouts(userData.id);
 
-                // Success!
                 setStatus('success');
                 setTimeout(() => navigate('/dashboard'), 2000);
             } catch (err) {

@@ -100,7 +100,6 @@ Make it personalized, progressive, and achievable. Return ONLY valid JSON, no ad
 
             # Try to extract JSON if there's extra text
             if not content.startswith('{'):
-                # Find first { and last }
                 start = content.find('{')
                 end = content.rfind('}')
                 if start != -1 and end != -1:

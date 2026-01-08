@@ -260,7 +260,6 @@ Make the requested adjustments while maintaining good training principles."""
         
         content = response.choices[0].message.content.strip()
         
-        # Clean JSON
         content = re.sub(r'^```json\s*', '', content)
         content = re.sub(r'^```\s*', '', content)
         content = re.sub(r'\s*```$', '', content)

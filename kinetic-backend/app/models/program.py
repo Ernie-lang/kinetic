@@ -19,7 +19,6 @@ class TrainingProgram(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     is_active = Column(Boolean, default=True)
 
-    # Relationships
     user = relationship("User", back_populates="training_programs")
     weeks = relationship("ProgramWeek", back_populates="program", cascade="all, delete-orphan")
 
@@ -31,7 +30,6 @@ class ProgramWeek(Base):
     week_number = Column(Integer, nullable=False)
     weekly_goal = Column(String(200))
 
-    # Relationships
     program = relationship("TrainingProgram", back_populates="weeks")
     workouts = relationship("ProgramWorkout", back_populates="week", cascade="all, delete-orphan")
 
@@ -48,5 +46,4 @@ class ProgramWorkout(Base):
     completed = Column(Boolean, default=False)
     completed_at = Column(DateTime)
 
-    # Relationships
     week = relationship("ProgramWeek", back_populates="workouts")

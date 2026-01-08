@@ -14,7 +14,6 @@ export default function Chat() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const messageEndRef = useRef(null);
 
-    // Auto-scroll to bottom of chat when new messages are added
     const scrollToBottom = () => {
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -127,7 +126,7 @@ export default function Chat() {
         if (conversation) {
             setActiveConversationId(conversationId);
             setMessages(conversation.messages);
-            setSidebarOpen(false); // Close sidebar on mobile
+            setSidebarOpen(false);
         }
     };
 

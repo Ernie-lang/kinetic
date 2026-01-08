@@ -9,6 +9,11 @@ export const useUserStore = create(
 
             setUser: (user) => set({ user, isConnected: !!user }),
             clearUser: () => set({ user: null, isConnected: false }),
+
+            logout: () => {
+                set({ user: null, isConnected: false });
+                localStorage.removeItem('kinetic-user-storage');
+            },
         }),
         {
             name: 'kinetic-user-storage',

@@ -11,7 +11,6 @@ router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 async def get_dashboard_stats(user_id: int, db: Session = Depends(get_db)):
     """Get dashboard statistics for a user"""
 
-    # Check if user exists
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -28,7 +27,6 @@ async def get_dashboard_stats(user_id: int, db: Session = Depends(get_db)):
 async def get_weekly_summary(user_id: int, db: Session = Depends(get_db)):
     """Get weekly training summary for a user"""
 
-    # Check if user exists
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")

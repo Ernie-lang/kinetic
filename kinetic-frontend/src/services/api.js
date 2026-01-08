@@ -15,7 +15,6 @@ export const stravaAPI = {
     handleCallback: (code) => api.post(`/strava/auth/callback?code=${code}`),
     syncWorkouts: (userId) => api.post(`/strava/sync/${userId}`),
     getStatus: (userId) => api.get(`/strava/status/${userId}`),
-    disconnect: (userId) => api.delete(`/strava/disconnect/${userId}`),
 };
 
 // Workouts API
@@ -39,6 +38,13 @@ export const analyticsAPI = {
     getWeeklySummary: (userId) => api.get(`/analytics/weekly/${userId}`),
 };
 
+// Sport Analytics API
+export const sportAnalyticsAPI = {
+    getRunning: (userId) => api.get(`/analytics/running/${userId}`),
+    getCycling: (userId) => api.get(`/analytics/cycling/${userId}`),
+    getSwimming: (userId) => api.get(`/analytics/swimming/${userId}`)
+};
+
 // Programs API endpoints
 export const programsAPI = {
     generate: (userId, programData) => api.post('/programs/generate', {
@@ -53,6 +59,10 @@ export const programsAPI = {
         user_id: userId,
         adjustment_request: adjustmentRequest
     }),
+};
+
+export const authAPI = {
+    logout: (userId) => api.post(`/auth/logout`, { user_id: userId }),
 };
 
 export default api;

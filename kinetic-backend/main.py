@@ -2,19 +2,17 @@ from sys import prefix
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database.base import engine, Base
-from app.models import User, Workout
-from app.routes import strava, workouts, chat, analytics, programs
+from app.models.user import User
+from app.models.workout import Workout
+from app.models.chat import ChatMessage, DailyUsage
+from app.models.program import TrainingProgram, ProgramWeek, ProgramWorkout
+from app.routes import strava, workouts, chat, analytics, programs, sport_analytics, auth
 
 #Create all tables in the database
 Base.metadata.create_all(bind=engine)
 
-# Create the FastAPI app
-# This is like creating your "server"
 app = FastAPI(title="Kinetic API")
 
-# CORS = Cross-Origin Resource Sharing
-# This allows your React app (running on port 5173) to talk to your API (running on port 8000)
-# Without this, browsers block requests between different ports for security
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Your React app's URL
@@ -28,14 +26,13 @@ app.include_router(workouts.router, prefix="/api", tags=["workouts"])
 app.include_router(chat.router)
 app.include_router(analytics.router)
 app.include_router(programs.router)
+app.include_router(sport_analytics.router)
+app.include_router(auth.router)
 
-# This is an "endpoint" or "route"
-# When someone visits http://localhost:8000/ they'll get this response
 @app.get("/")
 def read_root():
     return {"message": "Welcome to Kinetic API"}
 
-# Another endpoint for checking if the server is running
 @app.get("/health")
 def health_check():
     return {"status": "healthy"}

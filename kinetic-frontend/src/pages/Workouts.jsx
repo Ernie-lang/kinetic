@@ -55,6 +55,28 @@ const Workouts = () => {
         return `${km} km`;
     };
 
+    // Check if workout type has analytics page
+    const hasAnalytics = (workoutType) => {
+        const typesWithAnalytics = ['Run', 'Ride', 'Swim'];
+        return typesWithAnalytics.includes(workoutType);
+    };
+
+    const handleWorkoutClick = (workoutType) => {
+        if (!hasAnalytics(workoutType)) return;
+        
+        // Map workout types to analytics routes
+        const typeMap = {
+            'Run': 'running',
+            'Ride': 'cycling',
+            'Swim': 'swimming'
+        };
+        
+        const analyticsRoute = typeMap[workoutType];
+        if (analyticsRoute) {
+            navigate(`/analytics/${analyticsRoute}`);
+        }
+    };
+
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -97,7 +119,12 @@ const Workouts = () => {
                         {workouts.map((workout) => (
                             <div
                                 key={workout.id}
-                                className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition cursor-pointer"
+                                className={`bg-white rounded-lg shadow p-6 transition ${
+                                    hasAnalytics(workout.type) 
+                                    ? 'hover:shadow-lg cursor-pointer' 
+                                    : 'cursor-default'
+                                }`}
+                                onClick={() => handleWorkoutClick(workout.type)}
                             >
                                 <div className="flex justify-between items-center">
                                     <div>
@@ -112,12 +139,20 @@ const Workouts = () => {
                                         </div>
                                     </div>
 
-                                    <div>
+                                    <div className="flex items-center gap-3">
                                         <span className={`px-4 py-2 rounded-full text-white text-sm font-bold ${
-                                            workout.sport_type === 'Run' ? 'bg-green-600' : 'bg-blue-600'
+                                            workout.type === 'Run' ? 'bg-green-600' : 
+                                            workout.type === 'Ride' ? 'bg-blue-600' :
+                                            workout.type === 'Swim' ? 'bg-cyan-600' :
+                                            'bg-orange-600'
                                         }`}>
-                                            {workout.sport_type}
+                                            {workout.type}
                                         </span>
+                                        {hasAnalytics(workout.type) && (
+                                            <span className="text-gray-400 text-sm">
+                                                View Analytics →
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </div>

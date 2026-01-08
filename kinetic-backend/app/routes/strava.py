@@ -1,7 +1,3 @@
-"""
-Strava OAuth and Sync Endpoints
-"""
-
 from fastapi import APIRouter, HTTPException, Depends, Query
 from sqlalchemy.orm import Session
 import httpx
@@ -69,7 +65,6 @@ async def handle_callback(
             user = db.query(User).filter(User.strava_athlete_id == athlete.get("id")).first()
 
             if not user:
-                # Create new user
                 user = User(
                     email=athlete.get("email", f"user{athlete.get('id')}@strava.local"),
                     first_name=athlete.get("firstname"),
@@ -82,7 +77,6 @@ async def handle_callback(
                 )
                 db.add(user)
             else:
-                # Update existing user
                 user.strava_access_token = data["access_token"]
                 user.strava_refresh_token = data["refresh_token"]
                 user.strava_token_expires_at = datetime.fromtimestamp(data["expires_at"])
@@ -218,18 +212,3 @@ async def get_strava_status(user_id: int, db: Session = Depends(get_db)):
         "athlete_id": user.strava_athlete_id,
         "name": f"{user.first_name} {user.last_name}" if user.first_name else None
     }
-
-@router.delete("/disconnect/{user_id}")
-async def disconnect_strava(user_id: int, db: Session = Depends(get_db)):
-    """ Disconnect Strava account """
-    user = db.query(User).filter(User.id == user_id).first()
-
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    user.strava_access_token = None
-    user.strava_refresh_token = None
-    user.strava_token_expires_at = None
-    db.commit()
-
-    return {"success": True}

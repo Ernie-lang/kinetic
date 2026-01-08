@@ -29,9 +29,9 @@ const ChatSidebar = ({
     
         conversations.forEach(conv => {
           // Parse the id (YYYY-MM-DD) to create a reliable date
-          const dateStr = conv.id; // Use the id which is already in YYYY-MM-DD format
-          const [year, month, day] = dateStr.split('-').map(Number);
-          const convDate = new Date(year, month - 1, day); // month is 0-indexed
+          const dateStr = conv.id;
+          const [year, month, day] = dateStr.split('-').map(Number); 
+          const convDate = new Date(year, month - 1, day); // month is 0-indexed in JavaScript
           const convDay = new Date(convDate.getFullYear(), convDate.getMonth(), convDate.getDate());
     
           if (convDay.getTime() === today.getTime()) {
