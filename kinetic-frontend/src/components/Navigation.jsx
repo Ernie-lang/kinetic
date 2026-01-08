@@ -30,13 +30,10 @@ export default function Navigation() {
             : 'text-gray-700 hover:bg-gray-100'
         }`;
 
-    // Close dropdown when clicking outside (desktop only)
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // Check if we're on desktop (width >= 768px)
             const isDesktop = window.innerWidth >= 768;
             
-            // Only close analytics dropdown if clicked outside on desktop
             if (isDesktop && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setAnalyticsOpen(false);
             }
@@ -56,13 +53,9 @@ export default function Navigation() {
             }
         } catch (error) {
             console.error('Logout error:', error);
-            // Continue with logout even if backend call fails
         } finally {
-            // Clear frontend state
             logout();
-            // Close mobile menu if open
             setMobileMenuOpen(false);
-            // Redirect to home/login page
             navigate('/');
             setIsLoggingOut(false);
         }
